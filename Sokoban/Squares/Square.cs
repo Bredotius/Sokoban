@@ -11,6 +11,8 @@ namespace Sokoban
         public char Character { get; set; }
         public IEntity Entity { get; set; }
 
+
+
         private Square getSquare(Directions direction)
         {
             switch (direction)
