@@ -18,5 +18,17 @@ namespace Sokoban
         {
             Square = square;
         }
+        public bool Move(Directions direction)
+        {
+            Square square = Square.RelocateEntity(direction);
+
+            if (square != null)
+            {
+                Square = square;
+                return true;
+            }
+
+            return false;
+        }
     }
 }

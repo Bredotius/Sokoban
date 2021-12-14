@@ -10,12 +10,13 @@ namespace Sokoban
 # o+#
 #####";
 
-        private const string mapBigger = @"
+        private const string mapBigger = 
+            @"
   ##### 
 ###   # 
 #+po  # 
 ### o+# 
-#+##o #
+#+##o # 
 # # + ##
 #o Ooo+#
 #   +  #
@@ -31,7 +32,7 @@ namespace Sokoban
         {
             State = GameStates.Playing;
 
-            var gameField = new GameField(map);
+            var gameField = new GameField(mapBigger);
 
             Player = gameField.Player;
 
@@ -48,12 +49,16 @@ namespace Sokoban
             switch (key.Key)
             {
                 case ConsoleKey.UpArrow:
+                    Player.Move(Directions.UP);
                     break;
                 case ConsoleKey.DownArrow:
+                    Player.Move(Directions.DOWN);
                     break;
                 case ConsoleKey.LeftArrow:
+                    Player.Move(Directions.LEFT);
                     break;
                 case ConsoleKey.RightArrow:
+                    Player.Move(Directions.RIGHT);
                     break;
             }
         }

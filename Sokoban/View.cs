@@ -17,6 +17,8 @@ namespace Sokoban
 
         public ConsoleKeyInfo Display()
         {
+            Console.Clear();
+
             GameField.PrintField();
 
             Console.Write("Enter direction ((U)p, (D)own, (L)eft, (R)ight): ");
