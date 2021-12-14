@@ -8,7 +8,7 @@ namespace Sokoban
 {
     public class Player : IMoveable
     {
-        public char Character => Square is Storage ? 'P' : Square is Spike ? '@' : 'p';
+        public char Character => Square is Storage ? 'P' : Square is Spike ? '☺' : 'p';
 
         public Square Square { get; set; }
 

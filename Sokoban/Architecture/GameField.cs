@@ -22,6 +22,8 @@ namespace Sokoban
 
             var result = new Square[rows.Length, rows[0].Length];
 
+            Portal enter = null;
+
             for (var x = 0; x < rows.Length; x++)
                 for (var y = 0; y < rows[0].Length; y++)
                 {
@@ -59,6 +61,20 @@ namespace Sokoban
                             break;
                         case '*':
                             square = new Spike();
+                            break;
+                        case '@':
+                            if (enter == null)
+                            {
+                                enter = new Portal();
+                                square = enter;
+                            }
+                            else
+                            {
+                                var exit = new Portal();
+                                enter.Exit = exit;
+                                exit.Exit = enter;
+                                square = exit;
+                            }
                             break;
                     }
                     result[x, y] = square;

@@ -29,6 +29,12 @@ namespace Sokoban
                     entity.Update(square.GetSquareInDirection(direction));
                 }
 
+                if (square is Portal)
+                {
+                    Portal portal = (Portal)square;
+                    square = portal.Exit;
+                }
+
                 square.Entity = Entity;
                 Entity = null;
                 return square;

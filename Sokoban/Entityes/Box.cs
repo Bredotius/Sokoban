@@ -23,7 +23,12 @@ namespace Sokoban
 
         public void Update(Square square)
         {
-            Square = square;
+            if (square is Portal)
+            {
+                Portal portal = (Portal)square;
+                Square = portal.Exit;
+            }
+            else Square = square;
             InDeadEnd = CheckDeadEnd();
         }
 
