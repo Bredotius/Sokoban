@@ -24,7 +24,7 @@ namespace Sokoban
             switch (state)
             {
                 case GameStates.Game:
-                    Console.Write("Enter direction (Use arrows): ");
+                    Console.Write("Game is on, enter direction(Use arrows) to move or press 'Backspace' to quit: ");
                     break;
                 case GameStates.Menu:
                     Console.Write("Choose game field (Arrows to switch. To choose: Enter): ");

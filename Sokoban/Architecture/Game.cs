@@ -82,6 +82,9 @@ namespace Sokoban
                 case ConsoleKey.Enter:
                     if (State == GameStates.Menu) State = GameStates.Game;
                     break;
+                case ConsoleKey.Backspace:
+                    if (State == GameStates.Game) Menu();
+                    break;
                 case ConsoleKey.UpArrow:
                     if (State == GameStates.Game) GameField.Player.Move(Directions.UP);
                     break;
