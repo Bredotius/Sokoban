@@ -4,11 +4,12 @@ namespace Sokoban
 {
     public class Game
     {
-        private static string[] maps = { @"
+        private const string map1 = @"
 #####
-#p*O#
+#p#O#
 # o+#
-#####", @"
+#####"; 
+        private const string map2 = @"
   ##### 
 ###   # 
 #+po  # 
@@ -17,7 +18,15 @@ namespace Sokoban
 # # + ##
 #o Ooo+#
 #   +  #
-########" };
+########";
+        private const string map3 = @"
+#############
+#   *   #  +#
+# o  #+##* ##
+# #*o   o   #
+#  p  + ## ##
+#  # *     *#
+#############";
 
         private View view;
 
@@ -25,7 +34,7 @@ namespace Sokoban
         public GameStates State;
         public GameField GameField;
         public int Map = 0;
-
+        private string[] maps = { map1, map2, map3 };
         public void Menu()
         {
             State = GameStates.Menu;
