@@ -90,11 +90,11 @@ namespace Sokoban
                     break;
                 case ConsoleKey.LeftArrow:
                     if (State == GameStates.Game) GameField.Player.Move(Directions.LEFT);
-                    if (State == GameStates.Menu) Map = (Map - 1 > -1) ? Map - 1 : Map;
+                    if (State == GameStates.Menu) Map = (Map - 1 > -1) ? Map - 1 : Map = Maps.Length - 1;
                     break;
                 case ConsoleKey.RightArrow:
                     if (State == GameStates.Game) GameField.Player.Move(Directions.RIGHT);
-                    if (State == GameStates.Menu) Map = (Map + 1 < Maps.Length) ? Map + 1 : Map;
+                    if (State == GameStates.Menu) Map = (Map + 1 < Maps.Length) ? Map + 1 : Map = 0;
                     break;
             }
         }
