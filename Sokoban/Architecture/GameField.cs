@@ -88,7 +88,8 @@ namespace Sokoban
         {
             Square square;
 
-            if (x >= squares.GetLength(0) || x < 0 || y >= squares.GetLength(1) || y < 0)
+            if (x >= squares.GetLength(0) || x < 0 
+                || y >= squares.GetLength(1) || y < 0)
             {
                 return null;
             }

@@ -13,24 +13,21 @@ namespace Sokoban
 
         public Square RelocateEntity(Directions direction)
         {
-            Square square = getSquareInDirection(direction);
+            Square square = GetSquareInDirection(direction);
 
-            if (square is Wall) return null;
-
-            if (square.Entity is null)
+            if (square != null)
             {
-                square.Entity = Entity;
-                Entity = null;
-                return square;
-            }
-            else if (square.Entity is IPushable)
-            {
-                IPushable entity = (IPushable)square.Entity;
+                if (square is Wall) return null;
 
-                if (Entity is IPushable) return null;
-                if (square.RelocateEntity(direction) == null) return null;
+                if (square.Entity is IPushable)
+                {
+                    IPushable entity = (IPushable)square.Entity;
 
-                entity.Update(square.getSquareInDirection(direction));
+                    if (Entity is IPushable) return null;
+                    if (square.RelocateEntity(direction) == null) return null;
+
+                    entity.Update(square.GetSquareInDirection(direction));
+                }
 
                 square.Entity = Entity;
                 Entity = null;
@@ -40,7 +37,7 @@ namespace Sokoban
             return null;
         }
 
-        private Square getSquareInDirection(Directions direction)
+        public Square GetSquareInDirection(Directions direction)
         {
             switch (direction)
             {
