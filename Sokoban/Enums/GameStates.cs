@@ -11,6 +11,7 @@ namespace Sokoban
         Menu,
         Playing,
         Lose,
-        Win
+        Win,
+        Dead
     }
 }

@@ -8,9 +8,11 @@ namespace Sokoban
 {
     public class Player : IMoveable
     {
-        public char Character => Square is Storage ? 'P' : 'p';
+        public char Character => Square is Storage ? 'P' : Square is Spike ? '@' : 'p';
 
         public Square Square { get; set; }
+
+        public int HealthPoints { get; set; } = 3;
 
         public Player(Square square)
         {
@@ -20,7 +22,11 @@ namespace Sokoban
         {
             Square square = Square.RelocateEntity(direction);
 
-            if (square != null) Square = square;
+            if (square != null)
+            {
+                if (square is Spike) HealthPoints--;
+                Square = square;
+            }
         }
     }
 }

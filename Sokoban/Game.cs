@@ -6,7 +6,7 @@ namespace Sokoban
     {
         private static string[] maps = { @"
 #####
-#p#O#
+#p*O#
 # o+#
 #####", @"
   ##### 
@@ -36,7 +36,7 @@ namespace Sokoban
                 GameField = new GameField(maps[Map]);
 
                 view = new View(GameField);
-                CheckInput(view.Display(Views.Menu));
+                CheckInput(view.Display(State));
             }
 
             Play();
@@ -52,9 +52,8 @@ namespace Sokoban
 
             while (State == GameStates.Playing)
             {
-                CheckInput(view.Display(Views.Game));
-                IsWin();
-                IsLose();
+                CheckInput(view.Display(State));
+                CheckGameState();
             }
 
             GameResult();
@@ -62,8 +61,7 @@ namespace Sokoban
 
         public void GameResult()
         {
-            if (State == GameStates.Win) view.Display(Views.Win);
-            if (State == GameStates.Lose) view.Display(Views.Lose);
+            view.Display(State);
 
             Menu();
         }
@@ -92,6 +90,13 @@ namespace Sokoban
             }
         }
 
+        private void CheckGameState()
+        {
+            IsWin();
+            IsLose();
+            IsPlayerDead();
+        }
+
         private void IsWin()
         {
             int boxInStorage = 0;
@@ -114,6 +119,11 @@ namespace Sokoban
                     break;
                 }
             }
+        }
+
+        private void IsPlayerDead()
+        {
+            if(GameField.Player.HealthPoints == 0) State = GameStates.Dead;
         }
     }
 }

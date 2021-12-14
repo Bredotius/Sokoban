@@ -15,25 +15,28 @@ namespace Sokoban
             GameField = gameField;
         }
 
-        public ConsoleKeyInfo Display(Views view)
+        public ConsoleKeyInfo Display(GameStates state)
         {
             Console.Clear();
 
             GameField.PrintField();
 
-            switch (view)
+            switch (state)
             {
-                case Views.Game:
+                case GameStates.Playing:
                     Console.Write("Enter direction (Use arrows): ");
                     break;
-                case Views.Menu:
+                case GameStates.Menu:
                     Console.Write("Choose game field (Arrows to switch. To choose: Enter): ");
                     break;
-                case Views.Lose:
+                case GameStates.Lose:
                     Console.Write("You lose! The box cannot be moved anymore.");
                     break;
-                case Views.Win:
+                case GameStates.Win:
                     Console.Write("You win! All boxes in storage");
+                    break;
+                case GameStates.Dead:
+                    Console.Write("You dead! Beware of spikes next time");
                     break;
             }
 

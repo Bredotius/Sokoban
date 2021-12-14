@@ -57,6 +57,9 @@ namespace Sokoban
                             Player = new Player(square);
                             square.Entity = Player;
                             break;
+                        case '*':
+                            square = new Spike();
+                            break;
                     }
                     result[x, y] = square;
                 }

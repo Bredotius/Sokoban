@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Sokoban
 {
-    public enum Views
+    public class Spike : Square
     {
-        Menu,
-        Game,
-        Win,
-        Lose
+        public Spike()
+        {
+            this.Character = '*';
+        }
     }
 }
