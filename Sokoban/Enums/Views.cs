@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Sokoban
 {
-    public enum GameStates
+    public enum Views
     {
         Menu,
-        Playing,
-        Lose,
-        Win
+        Game,
+        Win,
+        Lose
     }
 }

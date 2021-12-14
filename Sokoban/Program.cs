@@ -6,7 +6,7 @@ namespace Sokoban
     {
         static void Main(string[] args)
         {
-            new Game().Play();
+            new Game().Menu();
         }
     }
 }

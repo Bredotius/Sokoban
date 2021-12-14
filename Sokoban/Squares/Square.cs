@@ -19,28 +19,18 @@ namespace Sokoban
 
             if (square.Entity is null)
             {
-                if (Entity is Player)
-                {
-                    Player player = (Player)Entity;
-                    if (square is Storage)
-                        player.InStorage = true;
-                    else player.InStorage = false;
-                }
                 square.Entity = Entity;
                 Entity = null;
                 return square;
             }
-            else if (square.Entity is Box)
+            else if (square.Entity is IPushable)
             {
-                var box = (Box)square.Entity;
+                IPushable entity = (IPushable)square.Entity;
 
-                if (Entity is Box) return null;
-
+                if (Entity is IPushable) return null;
                 if (square.RelocateEntity(direction) == null) return null;
 
-                if(square.getSquareInDirection(direction) is Storage)
-                    box.InStorage = true;
-                else box.InStorage = false;
+                entity.Update(square.getSquareInDirection(direction));
 
                 square.Entity = Entity;
                 Entity = null;

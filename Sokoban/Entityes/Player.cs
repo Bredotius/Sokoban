@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace Sokoban
 {
-    public class Player : IEntity
+    public class Player : IMoveable
     {
-        public char Character => InStorage ? 'P' : 'p';
-
-        public bool InStorage { get; set; } = false;
+        public char Character => Square is Storage ? 'P' : 'p';
 
         public Square Square { get; set; }
 
@@ -18,17 +16,11 @@ namespace Sokoban
         {
             Square = square;
         }
-        public bool Move(Directions direction)
+        public void Move(Directions direction)
         {
             Square square = Square.RelocateEntity(direction);
 
-            if (square != null)
-            {
-                Square = square;
-                return true;
-            }
-
-            return false;
+            if (square != null) Square = square;
         }
     }
 }

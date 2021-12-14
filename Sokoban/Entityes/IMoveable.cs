@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace Sokoban
 {
-    public enum GameStates
+    public interface IMoveable : IEntity
     {
-        Menu,
-        Playing,
-        Lose,
-        Win
+        void Move(Directions direction);
     }
 }

@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace Sokoban
 {
-    class GameField
+    public class GameField
     {
         public Square First { get; set; }
 
         public Player Player { get; set; }
+
+        public List<Box> Boxes { get; } = new List<Box>();
 
         public GameField(string map, string separator = "\r\n")
         {
@@ -34,29 +36,26 @@ namespace Sokoban
                             break;
                         case 'o':
                             square = new Floor();
-                            Box box = new Box(square);
-                            square.Entity = box;
+                            square.Entity = new Box(square);
+                            Boxes.Add((Box)square.Entity);
                             break;
                         case 'p':
                             square = new Floor();
-                            Player player = new Player(square);
-                            square.Entity = player;
-                            Player = player;
+                            Player = new Player(square);
+                            square.Entity = Player;
                             break;
                         case '#':
                             square = new Wall();
                             break;
                         case 'O':
                             square = new Storage();
-                            box = new Box(square);
-                            box.InStorage = true;
-                            square.Entity = box;
+                            square.Entity = new Box(square);
+                            Boxes.Add((Box)square.Entity);
                             break;
                         case 'P':
                             square = new Storage();
-                            player = new Player(square);
-                            player.InStorage = true;
-                            square.Entity = player;
+                            Player = new Player(square);
+                            square.Entity = Player;
                             break;
                     }
                     result[x, y] = square;

@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace Sokoban
 {
-    public enum GameStates
+    public interface IPushable : IEntity
     {
-        Menu,
-        Playing,
-        Lose,
-        Win
+        void Update(Square square);
     }
 }
