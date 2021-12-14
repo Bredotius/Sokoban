@@ -28,13 +28,13 @@ namespace Sokoban
 #  # *     *#
 #############";
 
-        private View view;
+        private View View;
 
-        public int Scores;
-        public GameStates State;
-        public GameField GameField;
-        public int Map = 0;
-        private string[] maps = { map1, map2, map3 };
+        private GameStates State;
+        private GameField GameField;
+        private int Map = 0;
+
+        private string[] Maps = { map1, map2, map3 };
         public void Menu()
         {
             State = GameStates.Menu;
@@ -42,35 +42,35 @@ namespace Sokoban
 
             while (State == GameStates.Menu)
             {
-                GameField = new GameField(maps[Map]);
+                GameField = new GameField(Maps[Map]);
 
-                view = new View(GameField);
-                CheckInput(view.Display(State));
+                View = new View(GameField);
+                CheckInput(View.Display(State));
             }
 
             Play();
         }
 
-        public void Play()
+        private void Play()
         {
-            State = GameStates.Playing;
+            State = GameStates.Game;
 
-            GameField = new GameField(maps[Map]);
+            GameField = new GameField(Maps[Map]);
 
-            view = new View(GameField);
+            View = new View(GameField);
 
-            while (State == GameStates.Playing)
+            while (State == GameStates.Game)
             {
-                CheckInput(view.Display(State));
+                CheckInput(View.Display(State));
                 CheckGameState();
             }
 
             GameResult();
         }
 
-        public void GameResult()
+        private void GameResult()
         {
-            view.Display(State);
+            View.Display(State);
 
             Menu();
         }
@@ -80,21 +80,21 @@ namespace Sokoban
             switch (key.Key)
             {
                 case ConsoleKey.Enter:
-                    if (State == GameStates.Menu) State = GameStates.Playing;
+                    if (State == GameStates.Menu) State = GameStates.Game;
                     break;
                 case ConsoleKey.UpArrow:
-                    if (State == GameStates.Playing) GameField.Player.Move(Directions.UP);
+                    if (State == GameStates.Game) GameField.Player.Move(Directions.UP);
                     break;
                 case ConsoleKey.DownArrow:
-                    if (State == GameStates.Playing) GameField.Player.Move(Directions.DOWN);
+                    if (State == GameStates.Game) GameField.Player.Move(Directions.DOWN);
                     break;
                 case ConsoleKey.LeftArrow:
-                    if (State == GameStates.Playing) GameField.Player.Move(Directions.LEFT);
+                    if (State == GameStates.Game) GameField.Player.Move(Directions.LEFT);
                     if (State == GameStates.Menu) Map = (Map - 1 > -1) ? Map - 1 : Map;
                     break;
                 case ConsoleKey.RightArrow:
-                    if (State == GameStates.Playing) GameField.Player.Move(Directions.RIGHT);
-                    if (State == GameStates.Menu) Map = (Map + 1 < maps.Length) ? Map + 1 : Map;
+                    if (State == GameStates.Game) GameField.Player.Move(Directions.RIGHT);
+                    if (State == GameStates.Menu) Map = (Map + 1 < Maps.Length) ? Map + 1 : Map;
                     break;
             }
         }

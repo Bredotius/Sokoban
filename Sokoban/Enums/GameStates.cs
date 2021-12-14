@@ -9,7 +9,7 @@ namespace Sokoban
     public enum GameStates
     {
         Menu,
-        Playing,
+        Game,
         Lose,
         Win,
         Dead

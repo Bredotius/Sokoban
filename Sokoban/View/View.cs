@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sokoban
 {
-    class View
+    public class View
     {
         private GameField GameField;
 
@@ -23,7 +23,7 @@ namespace Sokoban
 
             switch (state)
             {
-                case GameStates.Playing:
+                case GameStates.Game:
                     Console.Write("Enter direction (Use arrows): ");
                     break;
                 case GameStates.Menu:
