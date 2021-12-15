@@ -14,8 +14,6 @@ namespace Sokoban
 
         public bool InStorage => Square is Storage ? true : false;
 
-        public bool InDeadEnd { get; set; } = false;
-
         public Box(Square square)
         {
             Square = square;
@@ -29,17 +27,6 @@ namespace Sokoban
                 Square = portal.Exit;
             }
             else Square = square;
-            InDeadEnd = CheckDeadEnd();
-        }
-
-        private bool CheckDeadEnd()
-        {
-            if (((Square.Up is Wall && Square.Right is Wall) ||
-                (Square.Right is Wall && Square.Down is Wall) ||
-                (Square.Down is Wall && Square.Left is Wall) ||
-                (Square.Left is Wall && Square.Up is Wall)) && !InStorage)
-                return true;
-            return false;
         }
     }
 }

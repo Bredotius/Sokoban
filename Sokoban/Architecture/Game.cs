@@ -32,6 +32,7 @@ namespace Sokoban
 
         private GameStates State;
         private GameField GameField;
+        private Player Player;
         private int Map = 0;
 
         private string[] Maps = { map1, map2, map3 };
@@ -56,6 +57,7 @@ namespace Sokoban
             State = GameStates.Game;
 
             GameField = new GameField(Maps[Map]);
+            Player = GameField.Player;
 
             View = new View(GameField);
 
@@ -86,17 +88,17 @@ namespace Sokoban
                     if (State == GameStates.Game) Menu();
                     break;
                 case ConsoleKey.UpArrow:
-                    if (State == GameStates.Game) GameField.Player.Move(Directions.UP);
+                    if (State == GameStates.Game) Player.Square = GameField.RelocateEntity(Player.Square, Directions.UP);
                     break;
                 case ConsoleKey.DownArrow:
-                    if (State == GameStates.Game) GameField.Player.Move(Directions.DOWN);
+                    if (State == GameStates.Game) Player.Square = GameField.RelocateEntity(Player.Square, Directions.DOWN);
                     break;
                 case ConsoleKey.LeftArrow:
-                    if (State == GameStates.Game) GameField.Player.Move(Directions.LEFT);
+                    if (State == GameStates.Game) Player.Square = GameField.RelocateEntity(Player.Square, Directions.LEFT);
                     if (State == GameStates.Menu) Map = (Map - 1 > -1) ? Map - 1 : Map = Maps.Length - 1;
                     break;
                 case ConsoleKey.RightArrow:
-                    if (State == GameStates.Game) GameField.Player.Move(Directions.RIGHT);
+                    if (State == GameStates.Game) Player.Square = GameField.RelocateEntity(Player.Square, Directions.RIGHT);
                     if (State == GameStates.Menu) Map = (Map + 1 < Maps.Length) ? Map + 1 : Map = 0;
                     break;
             }
@@ -125,7 +127,7 @@ namespace Sokoban
         {
             foreach (var box in GameField.Boxes)
             {
-                if (box.InDeadEnd)
+                if (InDeadEnd(box))
                 {
                     State = GameStates.Lose;
                     break;
@@ -136,6 +138,16 @@ namespace Sokoban
         private void IsPlayerDead()
         {
             if(GameField.Player.HealthPoints == 0) State = GameStates.Dead;
+        }
+
+        private bool InDeadEnd(Box box)
+        {
+            if (((GameField.GetSquareInDirection(box.Square, Directions.UP) is Wall && GameField.GetSquareInDirection(box.Square, Directions.RIGHT) is Wall) ||
+                (GameField.GetSquareInDirection(box.Square, Directions.RIGHT) is Wall && GameField.GetSquareInDirection(box.Square, Directions.DOWN) is Wall) ||
+                (GameField.GetSquareInDirection(box.Square, Directions.DOWN) is Wall && GameField.GetSquareInDirection(box.Square, Directions.LEFT) is Wall) ||
+                (GameField.GetSquareInDirection(box.Square, Directions.LEFT) is Wall && GameField.GetSquareInDirection(box.Square, Directions.UP) is Wall)) && !box.InStorage)
+                return true;
+            return false;
         }
     }
 }

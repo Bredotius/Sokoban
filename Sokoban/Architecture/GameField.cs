@@ -8,7 +8,7 @@ namespace Sokoban
 {
     public class GameField
     {
-        public Square First { get; set; }
+        public Square[,] Squares { get; set; }
 
         public Player Player { get; set; }
 
@@ -20,7 +20,7 @@ namespace Sokoban
             if (rows.Select(z => z.Length).Distinct().Count() != 1)
                 throw new Exception($"Wrong test map '{map}'");
 
-            var result = new Square[rows.Length, rows[0].Length];
+            Squares = new Square[rows.Length, rows[0].Length];
 
             Portal enter = null;
 
@@ -77,71 +77,92 @@ namespace Sokoban
                             }
                             break;
                     }
-                    result[x, y] = square;
+                    Squares[x, y] = square;
+                    Squares[x, y].Position = new Position(x, y);
                 }
-
-            for (int i = 0; i < result.GetLength(0); i++)
-            {
-                for (int j = 0; j < result.GetLength(1); j++)
-                {
-                    Square square = result[i, j];
-
-                    if (square == null) continue;
-
-                    square.Up = getSquare(result, i - 1, j);
-                    square.Down = getSquare(result, i + 1, j);
-                    square.Left = getSquare(result, i, j - 1);
-                    square.Right = getSquare(result, i, j + 1);
-
-                    if (i == 0 && j == 0)
-                    {
-                        First = square;
-                    }
-                }
-            }
         }
-        private Square getSquare(Square[,] squares, int x, int y)
+        public void PrintField()
         {
-            Square square;
+            for (var x = 0; x < Squares.GetLength(0); x++)
+                for (var y = 0; y < Squares.GetLength(1); y++)
+                {
+                    var current = Squares[x, y];
 
-            if (x >= squares.GetLength(0) || x < 0 
-                || y >= squares.GetLength(1) || y < 0)
+                    if (current.Entity != null)
+                        Console.Write(current.Entity.Character);
+
+                    else Console.Write(current.Character);
+
+                    if (y == Squares.GetLength(1) - 1)
+                        Console.WriteLine();
+                }
+        }
+
+        public Square RelocateEntity(Square square,  Directions direction)
+        {
+            Square neighborSquare = GetSquareInDirection(square, direction);
+
+            if (neighborSquare != null)
             {
-                return null;
-            }
+                if (neighborSquare is Wall) return square;
 
-            square = squares[x, y];
+                if (neighborSquare.Entity is IPushable)
+                {
+                    IPushable neighborEntity = (IPushable)neighborSquare.Entity;
+
+                    if (square.Entity is IPushable) return square;
+                    if (RelocateEntity(neighborSquare, direction) == null) return square;
+
+                    neighborEntity.Update(GetSquareInDirection(neighborEntity.Square, direction));
+                }
+
+                if (neighborSquare is Portal)
+                {
+                    Portal portal = (Portal)neighborSquare;
+                    neighborSquare = portal.Exit;
+                }
+
+                if (square.Entity is IMoveable)
+                    ((IMoveable)square.Entity).Update(GetSquareInDirection(square, direction));
+
+                neighborSquare.Entity = square.Entity;
+                square.Entity = null;
+
+                return neighborSquare;
+            }
 
             return square;
         }
 
-        public void PrintField()
-        {   
-            Square current = First;
-            Square firstSquareLine = current;
-
-            while(current != null)
+        public Square GetSquareInDirection(Square square, Directions direction)
+        {
+            switch (direction)
             {
-                if (current.Entity != null)
-                {
-                    Console.Write(current.Entity.Character);
-                }
-                else
-                {
-                    Console.Write(current.Character);
-                }
-
-                if (current.Right == null)
-                {
-                    Console.WriteLine("");
-                    current = firstSquareLine.Down;
-                    firstSquareLine = current;
-                }
-                else
-                {
-                    current = current.Right;
-                }
+                case Directions.UP:
+                    return getSquare(square.Position.X - 1, square.Position.Y);
+                case Directions.DOWN:
+                    return getSquare(square.Position.X + 1, square.Position.Y);
+                case Directions.LEFT:
+                    return getSquare(square.Position.X, square.Position.Y - 1);
+                case Directions.RIGHT:
+                    return getSquare(square.Position.X, square.Position.Y + 1);
+                default:
+                    return null;
             }
+        }
+        public Square getSquare(int x, int y)
+        {
+            Square square;
+
+            if (x >= Squares.GetLength(0) || x < 0
+                || y >= Squares.GetLength(1) || y < 0)
+            {
+                return null;
+            }
+
+            square = Squares[x, y];
+
+            return square;
         }
     }
 }

@@ -8,7 +8,6 @@ namespace Sokoban
 {
     public interface IMoveable : IEntity
     {
-        int HealthPoints { get; set; }
-        void Move(Directions direction);
+        void Update(Square square);
     }
 }

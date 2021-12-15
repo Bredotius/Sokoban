@@ -18,10 +18,8 @@ namespace Sokoban
         {
             Square = square;
         }
-        public void Move(Directions direction)
+        public void Update(Square square)
         {
-            Square square = Square.RelocateEntity(direction);
-
             if (square != null)
             {
                 if (square is Spike) HealthPoints--;
