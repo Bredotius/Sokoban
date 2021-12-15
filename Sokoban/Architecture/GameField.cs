@@ -8,7 +8,7 @@ namespace Sokoban
 {
     public class GameField
     {
-        public Square[,] Squares { get; set; }
+        private Square[,] Squares { get; set; }
 
         public Player Player { get; set; }
 
@@ -104,13 +104,13 @@ namespace Sokoban
 
             if (neighborSquare != null)
             {
-                if (neighborSquare is Wall) return square;
+                if (neighborSquare is Wall) return square.Entity is Player ? square : null;
 
                 if (neighborSquare.Entity is IPushable)
                 {
                     IPushable neighborEntity = (IPushable)neighborSquare.Entity;
 
-                    if (square.Entity is IPushable) return square;
+                    if (square.Entity is IPushable) return null;
                     if (RelocateEntity(neighborSquare, direction) == null) return square;
 
                     neighborEntity.Update(GetSquareInDirection(neighborEntity.Square, direction));
