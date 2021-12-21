@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace Sokoban
 {
@@ -23,13 +21,21 @@ namespace Sokoban
 ########";
         private const string map3 = @"
 #############
+#     o     #
+#     o     #
+# o    #    #
+#  p   M   o#
+#     o     #
+#############";
+        private const string map4 = @"
+#############
 #   *   #  +#
 # o  #+##* ##
 # #*o @ o   #
 #  p  + ## ##
-#@ # *     *#
+#@ # * M   *#
 #############";
 
-        public List<string> Maps = new List<string>() { map1, map2, map3 };
+        public List<string> Maps = new List<string>() { map1, map2, map3, map4 };
     }
 }

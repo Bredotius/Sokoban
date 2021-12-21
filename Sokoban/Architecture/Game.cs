@@ -65,17 +65,17 @@ namespace Sokoban
                     if (State == GameStates.Game) Menu();
                     break;
                 case ConsoleKey.UpArrow:
-                    if (State == GameStates.Game) Player.Square = GameField.RelocateEntity(Player.Square, Directions.UP);
+                    if (State == GameStates.Game) GameField.RelocateEntity(Player.Square, Directions.UP);
                     break;
                 case ConsoleKey.DownArrow:
-                    if (State == GameStates.Game) Player.Square = GameField.RelocateEntity(Player.Square, Directions.DOWN);
+                    if (State == GameStates.Game) GameField.RelocateEntity(Player.Square, Directions.DOWN);
                     break;
                 case ConsoleKey.LeftArrow:
-                    if (State == GameStates.Game) Player.Square = GameField.RelocateEntity(Player.Square, Directions.LEFT);
+                    if (State == GameStates.Game) GameField.RelocateEntity(Player.Square, Directions.LEFT);
                     if (State == GameStates.Menu) Map = (Map - 1 > -1) ? Map - 1 : Map = Maps.Count - 1;
                     break;
                 case ConsoleKey.RightArrow:
-                    if (State == GameStates.Game) Player.Square = GameField.RelocateEntity(Player.Square, Directions.RIGHT);
+                    if (State == GameStates.Game) GameField.RelocateEntity(Player.Square, Directions.RIGHT);
                     if (State == GameStates.Menu) Map = (Map + 1 < Maps.Count) ? Map + 1 : Map = 0;
                     break;
             }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sokoban
 {
@@ -14,13 +12,15 @@ namespace Sokoban
 
         public List<Box> Boxes { get; } = new List<Box>();
 
+        public List<Square> Magnets { get; } = new List<Square>();
+
         public GameField(string map, string separator = "\r\n")
         {
             var rows = map.Split(new[] { separator }, StringSplitOptions.RemoveEmptyEntries);
             if (rows.Select(z => z.Length).Distinct().Count() != 1)
                 throw new Exception($"Wrong test map '{map}'");
 
-            Squares = new Square[rows.Length, rows[0].Length];
+            Squares = new Square[rows[0].Length, rows.Length];
 
             Portal enter = null;
 
@@ -38,12 +38,12 @@ namespace Sokoban
                             break;
                         case 'o':
                             square = new Floor();
-                            square.Entity = new Box(square, EntityState.Free);
+                            square.Entity = new Box(square);
                             Boxes.Add((Box)square.Entity);
                             break;
                         case 'p':
                             square = new Floor();
-                            Player = new Player(square, EntityState.Free);
+                            Player = new Player(square);
                             square.Entity = Player;
                             break;
                         case '#':
@@ -76,26 +76,56 @@ namespace Sokoban
                                 square = exit;
                             }
                             break;
+                        case 'M':
+                            square = new Magnet();
+                            Magnets.Add(square);
+                            break;
                     }
-                    Squares[x, y] = square;
-                    Squares[x, y].Position = new Position(x, y);
+                    Squares[y, x] = square;
+                    Squares[y, x].Position = new Position(y, x);
                 }
+
+            InitializeMagnets();
         }
-        public void PrintField()
+
+        private void InitializeMagnets()
+        {
+            foreach (var magnet in Magnets)
+            {
+                MagnetizeSquares(magnet);
+            }
+        }
+
+        private void MagnetizeSquares(Square magnet)
         {
             for (var x = 0; x < Squares.GetLength(0); x++)
-                for (var y = 0; y < Squares.GetLength(1); y++)
+            {
+                if (!Squares[x, magnet.Position.Y].Effects.ContainsKey(SquareEffects.Magnetic))
+                    Squares[x, magnet.Position.Y].Effects.Add(SquareEffects.Magnetic, magnet);
+            }
+
+            for (var y = 0; y < Squares.GetLength(1); y++)
+            {
+                if (!Squares[magnet.Position.X, y].Effects.ContainsKey(SquareEffects.Magnetic))
+                    Squares[magnet.Position.X, y].Effects.Add(SquareEffects.Magnetic, magnet);
+            }
+        }
+
+        public void PrintField()
+        {
+            for (var x = 0; x < Squares.GetLength(1); x++)
+            {
+                for (var y = 0; y < Squares.GetLength(0); y++)
                 {
-                    var current = Squares[x, y];
+                    var current = Squares[y, x];
 
                     if (current.Entity != null)
                         Console.Write(current.Entity.Image);
 
                     else Console.Write(current.Image);
-
-                    if (y == Squares.GetLength(1) - 1)
-                        Console.WriteLine();
                 }
+                Console.WriteLine();
+            }
         }
 
         public Square RelocateEntity(Square square,  Directions direction)
@@ -122,8 +152,18 @@ namespace Sokoban
                     {
                         Portal portal = (Portal)neighborSquare;
                         neighborSquare = portal.Exit;
+                        ((Player)square.Entity).Square = neighborSquare;
                     }
-                    ((Player)square.Entity).Square = GetSquareInDirection(square, direction);
+                    else ((Player)square.Entity).Square = GetSquareInDirection(square, direction);
+                }
+
+                if (square.Entity is Box)
+                {
+                    if (neighborSquare.Effects.ContainsKey(SquareEffects.Magnetic))
+                    {
+                        neighborSquare = StickToMagnet(neighborSquare, square.Entity);
+                        ((Box)square.Entity).Square = neighborSquare;
+                    }
                 }
 
                 neighborSquare.Entity = square.Entity;
@@ -135,22 +175,44 @@ namespace Sokoban
             return square;
         }
 
+        public Square StickToMagnet(Square square, IEntity entity)
+        {
+            var magnetDirection = GetDirectionsToMagnet(square, square.Effects[SquareEffects.Magnetic]);
+            var nextSquare = GetSquareInDirection(square, magnetDirection);
+            while (nextSquare.Effects.ContainsKey(SquareEffects.Magnetic) && !entity.InConflict(nextSquare))
+            {
+                square = nextSquare;
+                nextSquare = GetSquareInDirection(square, magnetDirection);
+            }
+            return square;
+        }
+
+        private Directions GetDirectionsToMagnet(Square currentSquare, Square magnet)
+        {
+            if (magnet.Position.X < currentSquare.Position.X) return Directions.LEFT;
+            if (magnet.Position.X > currentSquare.Position.X) return Directions.RIGHT;
+
+            if (magnet.Position.Y < currentSquare.Position.Y) return Directions.UP;
+            else return Directions.DOWN;
+        }
+
         public Square GetSquareInDirection(Square square, Directions direction)
         {
             switch (direction)
             {
                 case Directions.UP:
-                    return getSquare(square.Position.X - 1, square.Position.Y);
-                case Directions.DOWN:
-                    return getSquare(square.Position.X + 1, square.Position.Y);
-                case Directions.LEFT:
                     return getSquare(square.Position.X, square.Position.Y - 1);
-                case Directions.RIGHT:
+                case Directions.DOWN:
                     return getSquare(square.Position.X, square.Position.Y + 1);
+                case Directions.LEFT:
+                    return getSquare(square.Position.X - 1, square.Position.Y);
+                case Directions.RIGHT:
+                    return getSquare(square.Position.X + 1, square.Position.Y);
                 default:
                     return null;
             }
         }
+
         public Square getSquare(int x, int y)
         {
             Square square;

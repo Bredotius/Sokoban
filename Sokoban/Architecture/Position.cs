@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Sokoban
+﻿namespace Sokoban
 {
     public class Position
     {
@@ -15,12 +9,6 @@ namespace Sokoban
         {
             X = x;
             Y = y;
-        }
-
-        public Position(Position position)
-        {
-            X = position.X;
-            Y = position.Y;
         }
     }
 }

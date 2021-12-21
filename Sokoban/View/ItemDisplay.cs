@@ -19,6 +19,8 @@ namespace Sokoban
         private string Wall = "#";
         private string Spike = "*";
         private string Portal = "@";
+        private string Magnet = "M";
+
 
         public string View { get; }
 
@@ -53,6 +55,9 @@ namespace Sokoban
                     break;
                 case Squares.Wall:
                     View = Wall;
+                    break;
+                case Squares.Magnet:
+                    View = Magnet;
                     break;
             }
         }

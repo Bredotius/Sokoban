@@ -1,37 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Sokoban
+﻿namespace Sokoban
 {
-    public class Box : Entity
+    public class Box : IEntity
     {
         private EntityState state;
-
-        public Box(Square square, EntityState state) : base(square) 
-        {
-            State = state;
+        private Square square;
+        public Square Square 
+        { 
+            get => square; 
+            set 
+            {
+                square = value;
+                State = this.State;
+            } 
         }
 
-        public override EntityState State
+        public Box(Square square, EntityState state)
+        {
+            Square = square;
+            State = state;
+        }
+        public Box(Square square)
+        {
+            Square = square;
+            State = EntityState.Free;
+        }
+
+        public EntityState State
         {
             get => Square is Storage ? EntityState.InStorage : EntityState.Free;
             set
             {
                 state = value;
             }
-        } 
+        }
 
-        public override string Image => new ItemDisplay(Entityes.Box, state).View;
+        public string Image => new ItemDisplay(Entityes.Box, state).View;
 
-        public override bool InConflict(Square square)
+        public bool InConflict(Square square)
         {
-            if (square.Entity is Box || square is Wall) return true;
-
-            if (square is Storage) State = EntityState.InStorage;
-            else if (State != EntityState.Free) State = EntityState.Free;
+            if (square.Entity is Box || square is Wall || square is Magnet) return true;
 
             return false;
         }

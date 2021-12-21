@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Sokoban
+﻿namespace Sokoban
 {
-    class Portal : Square
+    public class Portal : Square
     {
         public Square Exit { get; set; }
         public Portal()

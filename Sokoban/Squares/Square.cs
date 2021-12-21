@@ -7,6 +7,6 @@ namespace Sokoban
         public Position Position { get; set; }
         public string Image { get; set; }
         public IEntity Entity { get; set; }
-        public Dictionary<SquareEffects, bool> Effects { get; set; }
+        public Dictionary<SquareEffects, Square> Effects { get; set; } = new Dictionary<SquareEffects, Square>();
     }
 }

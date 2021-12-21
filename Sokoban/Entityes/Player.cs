@@ -1,41 +1,57 @@
 ﻿namespace Sokoban
 {
-    public class Player : Entity
+    public class Player : IEntity
     {
         private EntityState state;
-
-        public Player(Square square, EntityState state) : base(square)
+        private Square square;
+        public Square Square
         {
-            State = state;
+            get => square;
+            set
+            {
+                square = value;
+                State = this.State;
+            }
         }
 
-        public override EntityState State
+        public Player(Square square, EntityState state)
         {
-            get => Square is Storage ? EntityState.InStorage : Square is Spike ? EntityState.OnSpike : EntityState.Free;
+            Square = square;
+            State = state;
+        }
+        public Player(Square square)
+        {
+            Square = square;
+            State = EntityState.Free;
+        }
+
+        public EntityState State
+        {
+            get
+            {
+                if (Square is Storage) state = EntityState.InStorage;
+                else if (Square is Spike)
+                {
+                    state = EntityState.OnSpike;
+                    HealthPoints--;
+                }
+                else state = EntityState.Free;
+
+                return state;
+            }
             set
             {
                 state = value;
             }
         }
 
-        public override string Image => new ItemDisplay(Entityes.Player, state).View;
+        public string Image => new ItemDisplay(Entityes.Player, state).View;
 
         public int HealthPoints { get; set; } = 3;
 
-        public override bool InConflict(Square square)
+        public bool InConflict(Square square)
         {
-            if (square is Wall) return true;
-
-            if (square is Spike)
-            {
-                State = EntityState.OnSpike;
-                HealthPoints--;
-            }
-            else if (square is Storage)
-            {
-                State = EntityState.InStorage;
-            }
-            else if (State != EntityState.Free) State = EntityState.Free;
+            if (square is Wall || square is Magnet) return true;
 
             return false;
         }
