@@ -38,12 +38,12 @@ namespace Sokoban
                             break;
                         case 'o':
                             square = new Floor();
-                            square.Entity = new Box(square);
+                            square.Entity = new Box(square, EntityState.Free);
                             Boxes.Add((Box)square.Entity);
                             break;
                         case 'p':
                             square = new Floor();
-                            Player = new Player(square);
+                            Player = new Player(square, EntityState.Free);
                             square.Entity = Player;
                             break;
                         case '#':
@@ -51,12 +51,12 @@ namespace Sokoban
                             break;
                         case 'O':
                             square = new Storage();
-                            square.Entity = new Box(square);
+                            square.Entity = new Box(square, EntityState.InStorage);
                             Boxes.Add((Box)square.Entity);
                             break;
                         case 'P':
                             square = new Storage();
-                            Player = new Player(square);
+                            Player = new Player(square, EntityState.InStorage);
                             square.Entity = Player;
                             break;
                         case '*':
@@ -89,9 +89,9 @@ namespace Sokoban
                     var current = Squares[x, y];
 
                     if (current.Entity != null)
-                        Console.Write(current.Entity.Character);
+                        Console.Write(current.Entity.Image);
 
-                    else Console.Write(current.Character);
+                    else Console.Write(current.Image);
 
                     if (y == Squares.GetLength(1) - 1)
                         Console.WriteLine();
@@ -104,26 +104,27 @@ namespace Sokoban
 
             if (neighborSquare != null)
             {
-                if (neighborSquare is Wall) return square.Entity is Player ? square : null;
+                if (square.Entity.InConflict(neighborSquare)) return square.Entity is Player ? square : null;
 
-                if (neighborSquare.Entity is IPushable)
+                if (neighborSquare.Entity is Box)
                 {
-                    IPushable neighborEntity = (IPushable)neighborSquare.Entity;
+                    Box neighborEntity = (Box)neighborSquare.Entity;
 
-                    if (square.Entity is IPushable) return null;
+                    if (square.Entity is Box) return null;
                     if (RelocateEntity(neighborSquare, direction) == null) return square;
 
-                    neighborEntity.Update(GetSquareInDirection(neighborEntity.Square, direction));
+                    neighborEntity.Square = GetSquareInDirection(neighborEntity.Square, direction);
                 }
 
-                if (neighborSquare is Portal)
+                if (square.Entity is Player)
                 {
-                    Portal portal = (Portal)neighborSquare;
-                    neighborSquare = portal.Exit;
+                    if (neighborSquare is Portal)
+                    {
+                        Portal portal = (Portal)neighborSquare;
+                        neighborSquare = portal.Exit;
+                    }
+                    ((Player)square.Entity).Square = GetSquareInDirection(square, direction);
                 }
-
-                if (square.Entity is IMoveable)
-                    ((IMoveable)square.Entity).Update(GetSquareInDirection(square, direction));
 
                 neighborSquare.Entity = square.Entity;
                 square.Entity = null;

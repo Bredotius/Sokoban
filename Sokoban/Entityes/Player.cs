@@ -1,30 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Sokoban
+﻿namespace Sokoban
 {
-    public class Player : IMoveable
+    public class Player : Entity
     {
-        public char Character => Square is Storage ? 'P' : Square is Spike ? '☺' : 'p';
+        private EntityState state;
 
-        public Square Square { get; set; }
+        public Player(Square square, EntityState state) : base(square)
+        {
+            State = state;
+        }
+
+        public override EntityState State
+        {
+            get => Square is Storage ? EntityState.InStorage : Square is Spike ? EntityState.OnSpike : EntityState.Free;
+            set
+            {
+                state = value;
+            }
+        }
+
+        public override string Image => new ItemDisplay(Entityes.Player, state).View;
 
         public int HealthPoints { get; set; } = 3;
 
-        public Player(Square square)
+        public override bool InConflict(Square square)
         {
-            Square = square;
-        }
-        public void Update(Square square)
-        {
-            if (square != null)
+            if (square is Wall) return true;
+
+            if (square is Spike)
             {
-                if (square is Spike) HealthPoints--;
-                Square = square;
+                State = EntityState.OnSpike;
+                HealthPoints--;
             }
+            else if (square is Storage)
+            {
+                State = EntityState.InStorage;
+            }
+            else if (State != EntityState.Free) State = EntityState.Free;
+
+            return false;
         }
     }
 }

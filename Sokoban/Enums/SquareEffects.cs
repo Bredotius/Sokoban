@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace Sokoban
 {
-    public class Floor : Square
+    public enum SquareEffects
     {
-        public Floor()
-        {
-            this.Image = new ItemDisplay(Squares.Floor).View;
-        }
+        Magnetic
     }
 }

@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Sokoban
 {
-    public interface IMoveable : IEntity
+    public enum EntityState
     {
-        void Update(Square square);
+        Free,
+        InStorage,
+        OnSpike
     }
 }

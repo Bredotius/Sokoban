@@ -1,52 +1,29 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Sokoban
 {
     public class Game
     {
-        private const string map1 = @"
-#####
-#p#O#
-# o+#
-#####"; 
-        private const string map2 = @"
-  ##### 
-###   # 
-#+po  # 
-### o+# 
-#+##o # 
-# # + ##
-#o Ooo+#
-#   +  #
-########";
-        private const string map3 = @"
-#############
-#   *   #  +#
-# o  #+##* ##
-# #*o @ o   #
-#  p  + ## ##
-#@ # *     *#
-#############";
-
-        private View View;
+        private GameView GameView;
+        private MenuView MenuView;
 
         private GameStates State;
         private GameField GameField;
         private Player Player;
         private int Map = 0;
+        private List<string> Maps;
 
-        private string[] Maps = { map1, map2, map3 };
         public void Menu()
         {
             State = GameStates.Menu;
             GameField = null;
+            Maps = new Levels().Maps;
 
             while (State == GameStates.Menu)
             {
-                GameField = new GameField(Maps[Map]);
-
-                View = new View(GameField);
-                CheckInput(View.Display(State));
+                MenuView = new MenuView(Maps[Map]);
+                CheckInput(MenuView.Display());
             }
 
             Play();
@@ -59,11 +36,11 @@ namespace Sokoban
             GameField = new GameField(Maps[Map]);
             Player = GameField.Player;
 
-            View = new View(GameField);
+            GameView = new GameView(GameField);
 
             while (State == GameStates.Game)
             {
-                CheckInput(View.Display(State));
+                CheckInput(GameView.Display(State));
                 CheckGameState();
             }
 
@@ -72,7 +49,7 @@ namespace Sokoban
 
         private void GameResult()
         {
-            View.Display(State);
+            GameView.Display(State);
 
             Menu();
         }
@@ -95,11 +72,11 @@ namespace Sokoban
                     break;
                 case ConsoleKey.LeftArrow:
                     if (State == GameStates.Game) Player.Square = GameField.RelocateEntity(Player.Square, Directions.LEFT);
-                    if (State == GameStates.Menu) Map = (Map - 1 > -1) ? Map - 1 : Map = Maps.Length - 1;
+                    if (State == GameStates.Menu) Map = (Map - 1 > -1) ? Map - 1 : Map = Maps.Count - 1;
                     break;
                 case ConsoleKey.RightArrow:
                     if (State == GameStates.Game) Player.Square = GameField.RelocateEntity(Player.Square, Directions.RIGHT);
-                    if (State == GameStates.Menu) Map = (Map + 1 < Maps.Length) ? Map + 1 : Map = 0;
+                    if (State == GameStates.Menu) Map = (Map + 1 < Maps.Count) ? Map + 1 : Map = 0;
                     break;
             }
         }
@@ -117,7 +94,7 @@ namespace Sokoban
 
             foreach (var box in GameField.Boxes)
             {
-                if (box.Square is Storage) boxInStorage++;
+                if (box.State == EntityState.InStorage) boxInStorage++;
             }
 
             if (boxInStorage == GameField.Boxes.Count) State = GameStates.Win;
@@ -145,7 +122,7 @@ namespace Sokoban
             if (((GameField.GetSquareInDirection(box.Square, Directions.UP) is Wall && GameField.GetSquareInDirection(box.Square, Directions.RIGHT) is Wall) ||
                 (GameField.GetSquareInDirection(box.Square, Directions.RIGHT) is Wall && GameField.GetSquareInDirection(box.Square, Directions.DOWN) is Wall) ||
                 (GameField.GetSquareInDirection(box.Square, Directions.DOWN) is Wall && GameField.GetSquareInDirection(box.Square, Directions.LEFT) is Wall) ||
-                (GameField.GetSquareInDirection(box.Square, Directions.LEFT) is Wall && GameField.GetSquareInDirection(box.Square, Directions.UP) is Wall)) && !box.InStorage)
+                (GameField.GetSquareInDirection(box.Square, Directions.LEFT) is Wall && GameField.GetSquareInDirection(box.Square, Directions.UP) is Wall)) && box.State != EntityState.InStorage)
                 return true;
             return false;
         }

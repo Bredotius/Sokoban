@@ -1,11 +1,12 @@
-﻿using System;
+﻿using System.Collections.Generic;
 
 namespace Sokoban
 {
     public class Square
     {
         public Position Position { get; set; }
-        public char Character { get; set; }
+        public string Image { get; set; }
         public IEntity Entity { get; set; }
+        public Dictionary<SquareEffects, bool> Effects { get; set; }
     }
 }

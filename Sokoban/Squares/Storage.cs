@@ -10,7 +10,7 @@ namespace Sokoban
     {
         public Storage()
         {
-            this.Character = '+';
+            this.Image = new ItemDisplay(Squares.Storage).View;
         }
     }
 }

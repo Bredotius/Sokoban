@@ -10,7 +10,7 @@ namespace Sokoban
     {
         public Wall()
         {
-            this.Character = '#';
+            this.Image = new ItemDisplay(Squares.Wall).View;
         }
     }
 }

@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sokoban
 {
-    public class View
+    public class GameView
     {
         private GameField GameField;
 
-        public View(GameField gameField)
+        public GameView(GameField gameField)
         {
             GameField = gameField;
         }
@@ -25,9 +21,6 @@ namespace Sokoban
             {
                 case GameStates.Game:
                     Console.Write("Game is on, enter direction(Use arrows) to move or press 'Backspace' to quit: ");
-                    break;
-                case GameStates.Menu:
-                    Console.Write("Choose game field (Arrows to switch. To choose: Enter): ");
                     break;
                 case GameStates.Lose:
                     Console.Write("You lose! The box cannot be moved anymore.");

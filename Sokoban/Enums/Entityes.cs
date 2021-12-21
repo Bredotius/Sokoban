@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace Sokoban
 {
-    public class Floor : Square
+    public enum Entityes
     {
-        public Floor()
-        {
-            this.Image = new ItemDisplay(Squares.Floor).View;
-        }
+        Box,
+        Player
     }
 }

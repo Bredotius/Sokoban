@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace Sokoban
 {
-    public interface IPushable : IEntity
+    public enum Squares
     {
-        void Update(Square square);
+        Floor,
+        Portal,
+        Spike,
+        Storage,
+        Wall
     }
 }

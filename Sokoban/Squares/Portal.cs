@@ -11,7 +11,7 @@ namespace Sokoban
         public Square Exit { get; set; }
         public Portal()
         {
-            this.Character = '@';
+            this.Image = new ItemDisplay(Squares.Portal).View;
         }
     }
 }

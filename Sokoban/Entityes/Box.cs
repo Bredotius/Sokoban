@@ -6,27 +6,34 @@ using System.Threading.Tasks;
 
 namespace Sokoban
 {
-    public class Box : IPushable
+    public class Box : Entity
     {
-        public char Character => InStorage ? 'O' : 'o';
+        private EntityState state;
 
-        public Square Square { get; set; }
-
-        public bool InStorage => Square is Storage ? true : false;
-
-        public Box(Square square)
+        public Box(Square square, EntityState state) : base(square) 
         {
-            Square = square;
+            State = state;
         }
 
-        public void Update(Square square)
+        public override EntityState State
         {
-            if (square is Portal)
+            get => Square is Storage ? EntityState.InStorage : EntityState.Free;
+            set
             {
-                Portal portal = (Portal)square;
-                Square = portal.Exit;
+                state = value;
             }
-            else Square = square;
+        } 
+
+        public override string Image => new ItemDisplay(Entityes.Box, state).View;
+
+        public override bool InConflict(Square square)
+        {
+            if (square.Entity is Box || square is Wall) return true;
+
+            if (square is Storage) State = EntityState.InStorage;
+            else if (State != EntityState.Free) State = EntityState.Free;
+
+            return false;
         }
     }
 }

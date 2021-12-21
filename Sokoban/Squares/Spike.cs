@@ -10,7 +10,7 @@ namespace Sokoban
     {
         public Spike()
         {
-            this.Character = '*';
+            this.Image = new ItemDisplay(Squares.Spike).View;
         }
     }
 }
