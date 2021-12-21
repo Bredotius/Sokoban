@@ -13,7 +13,9 @@
 В качестве дополнительного функционала реализованы шипы, наступая на которые игрок теряет единицу здоровья.
 Когда количество единиц здоровья равно нулю игра заканчивается.  
 
-Добавлены порталы.
+Добавлены порталы, работающие парами, доступные только для Игрока. Порталы хранят в себе информации о местоположение пары.
+
+Добавлены магниты, накладывающие на квадраты находящиеся с мини на одной горизонтали и вертикали эффект магнитного поля. Попадая на клетку с магнитым полем ящик перемешяется к магниту.
 
 #### Обозначение символов на игровом поле:
 Символ| Обозначение
@@ -28,8 +30,8 @@
 `*`| Шипы
 `☺`| Игрок на шипах
 `@`| Портал
+`M`| Магнит
 
-### [Диаграмма классов](https://psv4.userapi.com/c235031/u141965379/docs/d1/1e02c99ce166/new_Untitled_Diagram_drawio_1.png?extra=1DOwwBE73vRusMrE9i3mL89SyHuysaIFjohlEY-8VOGAMkHbXReDG4Fy-R8uwPgzNoE95Ad-zR9wLFMCw2HwzxkhQLfNNA8dV99fUZ1Z25ru935MvyZg1WPe25Vl2DXHcAfapautOfM7vDELZRTxphr7)
+### [Диаграмма классов](https://psv4.userapi.com/c536132/u141965379/docs/d48/f12d85bdf600/Classes_drawio.png?extra=vh2uxaIK__L-RApLAkGYgn-iIctyv-WBy4tUPPMH4kotFSI0Yph7ue_ctR6UcD__GMVuVES96U24j3OzxZxZpZy-ug56jpRVJgRckidtugDqRVVtzXtkmoh--vcRvrMQtSQtpRlERySpFnpdsW4D6-pB)
 
-![](https://psv4.userapi.com/c235031/u141965379/docs/d1/1e02c99ce166/new_Untitled_Diagram_drawio_1.png?extra=1DOwwBE73vRusMrE9i3mL89SyHuysaIFjohlEY-8VOGAMkHbXReDG4Fy-R8uwPgzNoE95Ad-zR9wLFMCw2HwzxkhQLfNNA8dV99fUZ1Z25ru935MvyZg1WPe25Vl2DXHcAfapautOfM7vDELZRTxphr7)
-https://psv4.userapi.com/c235031/u141965379/docs/d1/1e02c99ce166/new_Untitled_Diagram_drawio_1.png?extra=1DOwwBE73vRusMrE9i3mL89SyHuysaIFjohlEY-8VOGAMkHbXReDG4Fy-R8uwPgzNoE95Ad-zR9wLFMCw2HwzxkhQLfNNA8dV99fUZ1Z25ru935MvyZg1WPe25Vl2DXHcAfapautOfM7vDELZRTxphr7
+![](https://psv4.userapi.com/c536132/u141965379/docs/d48/f12d85bdf600/Classes_drawio.png?extra=vh2uxaIK__L-RApLAkGYgn-iIctyv-WBy4tUPPMH4kotFSI0Yph7ue_ctR6UcD__GMVuVES96U24j3OzxZxZpZy-ug56jpRVJgRckidtugDqRVVtzXtkmoh--vcRvrMQtSQtpRlERySpFnpdsW4D6-pB)
